@@ -1,0 +1,8 @@
+{
+  "caption": "Diagonal wall crack (synthetic scene, stop 1).",
+  "category": "Structure",
+  "priority": "High",
+  "finding": "Diagonal wall crack",
+  "stop": 1,
+  "scene": "wall_crack"
+}

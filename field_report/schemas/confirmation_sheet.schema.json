@@ -1,0 +1,235 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "confirmation_sheet.schema.json",
+  "title": "confirmation_sheet.json — s9 open-items sidecar (the contract for answer ingestion)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "status",
+    "errors",
+    "meta",
+    "site",
+    "revision",
+    "items"
+  ],
+  "properties": {
+    "status": {
+      "enum": [
+        "ok",
+        "partial",
+        "failed"
+      ]
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "item",
+          "code",
+          "message"
+        ],
+        "properties": {
+          "item": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "retryable": {
+            "type": "boolean"
+          },
+          "attempts": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "meta": {
+      "type": "object",
+      "required": [
+        "stage",
+        "site",
+        "generated_at"
+      ],
+      "properties": {
+        "stage": {
+          "const": "s9_build_confirmation_sheet"
+        },
+        "site": {
+          "type": "string"
+        },
+        "generated_at": {
+          "type": "string"
+        },
+        "config_sha256": {
+          "type": "string"
+        },
+        "input_counts": {
+          "type": "object"
+        },
+        "output_counts": {
+          "type": "object"
+        },
+        "overrides_applied": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "site": {
+      "type": "string"
+    },
+    "revision": {
+      "type": "string"
+    },
+    "out_path": {
+      "type": "string"
+    },
+    "deferred": {
+      "type": "array",
+      "description": "optional: open items deliberately kept off the sheet; recorded so nothing is dropped silently.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "key",
+          "kind",
+          "reason"
+        ],
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "item_no",
+          "key",
+          "kind",
+          "scope",
+          "what",
+          "why",
+          "question",
+          "answer",
+          "source"
+        ],
+        "properties": {
+          "item_no": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "key": {
+            "type": "string",
+            "description": "stable id used to patch the source record on ingestion, e.g. 'S2-2/qty/0' or 'S9-1/marker/0' or 'general_info/row/Area'"
+          },
+          "kind": {
+            "enum": [
+              "quantity",
+              "no_photo",
+              "severity",
+              "sector_absence",
+              "gap"
+            ],
+            "description": "quantity and severity -> patchable automatically; the rest are recorded for a person"
+          },
+          "scope": {
+            "enum": [
+              "asset",
+              "report"
+            ]
+          },
+          "sector_id": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "sector_name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "asset_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "asset_name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "what": {
+            "type": "string",
+            "minLength": 1
+          },
+          "why": {
+            "type": "string",
+            "minLength": 1
+          },
+          "question": {
+            "type": "string",
+            "minLength": 1
+          },
+          "answer": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source": {
+            "type": "string",
+            "minLength": 1
+          },
+          "current_value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "unit": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "evidence_basis": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "internal traceability only — never rendered into the sheet"
+          },
+          "reason_source": {
+            "enum": [
+              "derived",
+              "authored"
+            ],
+            "description": "how the 'why it is open' text was produced: 'derived' means a rule read the quantity note and inferred it, 'authored' means a person wrote it in confirmation_overrides.json. A derived reason is a plausible guess about provenance, printed to the client as a statement of fact."
+          }
+        }
+      }
+    }
+  }
+}

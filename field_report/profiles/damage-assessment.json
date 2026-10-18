@@ -1,0 +1,172 @@
+{
+  "name": "damage-assessment",
+  "title": "Damage assessment",
+  "description": "Rapid building-condition survey: observations grouped by element and rated on a five-step damage scale; quantities are listed in a separate sheet.",
+  "classify": true,
+  "quantities_sheet": true,
+  "font": {
+    "name": "Calibri",
+    "size_pt": 11
+  },
+  "stop_regex": "(?i)\\b(?:stop|sector)\\s*[-:]?\\s*(\\d{1,2}|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)\\b",
+  "categories": [
+    {
+      "id": 1,
+      "name": "Structure",
+      "short": "Structure",
+      "keywords": {
+        "crack": 3,
+        "cracks": 3,
+        "cracking": 3,
+        "hairline": 2,
+        "wall": 2,
+        "gable": 2,
+        "column": 3,
+        "beam": 3,
+        "slab": 3,
+        "foundation": 3,
+        "plinth": 2,
+        "collapse": 3,
+        "collapsed": 3,
+        "settlement": 3,
+        "structural": 3,
+        "spalling": 3
+      }
+    },
+    {
+      "id": 2,
+      "name": "Roof",
+      "short": "Roof",
+      "keywords": {
+        "roof": 4,
+        "roofing": 4,
+        "sheeting": 3,
+        "sheets": 1,
+        "slope": 2,
+        "truss": 3,
+        "rafter": 3,
+        "ridge": 2,
+        "gutter": 2,
+        "ceiling": 1,
+        "leak": 2
+      }
+    },
+    {
+      "id": 3,
+      "name": "Openings",
+      "short": "Openings",
+      "keywords": {
+        "door": 3,
+        "doors": 3,
+        "door frame": 4,
+        "frame": 2,
+        "leaf": 2,
+        "window": 3,
+        "windows": 3,
+        "shutter": 3,
+        "glazing": 3,
+        "lintel": 2,
+        "hinge": 2
+      }
+    },
+    {
+      "id": 4,
+      "name": "Services",
+      "short": "Services",
+      "keywords": {
+        "cable": 3,
+        "cables": 3,
+        "panel": 3,
+        "board": 2,
+        "wiring": 3,
+        "pipe": 3,
+        "pipes": 3,
+        "plumbing": 3,
+        "pump": 3,
+        "tank": 2,
+        "meter": 2,
+        "electrical": 3,
+        "switchboard": 3,
+        "services": 2
+      }
+    },
+    {
+      "id": 5,
+      "name": "Access",
+      "short": "Access",
+      "keywords": {
+        "access": 3,
+        "access way": 4,
+        "rubble": 3,
+        "debris": 3,
+        "blocked": 2,
+        "road": 2,
+        "driveway": 3,
+        "path": 2,
+        "entrance": 2,
+        "gate": 1
+      }
+    },
+    {
+      "id": 6,
+      "name": "External works",
+      "short": "External works",
+      "keywords": {
+        "fence": 4,
+        "boundary wall": 4,
+        "yard": 2,
+        "paving": 3,
+        "drain": 2,
+        "drainage": 3,
+        "landscaping": 3,
+        "perimeter": 3,
+        "retaining wall": 4
+      }
+    }
+  ],
+  "scale": {
+    "label": "Damage level",
+    "values": [
+      "Destroyed",
+      "Severe",
+      "Moderate",
+      "Minor",
+      "None"
+    ],
+    "default": "Moderate",
+    "explicit_regex": "(?i)\\b(?:severity|damage level|rating)\\s*[:\\-]?\\s*(destroyed|severe|moderate|minor|none)\\b",
+    "keywords": {
+      "Destroyed": [
+        "collapsed",
+        "destroyed",
+        "demolished",
+        "flattened"
+      ],
+      "Severe": [
+        "badly damaged",
+        "major"
+      ],
+      "Minor": [
+        "hairline",
+        "slight",
+        "small",
+        "cosmetic"
+      ],
+      "None": [
+        "undamaged",
+        "no damage",
+        "intact and sound"
+      ]
+    }
+  },
+  "report": {
+    "title": "Damage assessment report",
+    "unit": "Stop",
+    "unit_plural": "stops",
+    "summary_heading": "Summary",
+    "findings_heading": "Findings by element",
+    "priorities_heading": "Recommended actions",
+    "absent_finding": "No damage recorded for this element during the walk.",
+    "absent_action": "N/A: nothing recorded for this element."
+  }
+}

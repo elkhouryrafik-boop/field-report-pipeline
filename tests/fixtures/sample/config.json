@@ -1,0 +1,14 @@
+{
+  "site": "Northwind Training Depot (fictional)",
+  "site_slug": "northwind-demo",
+  "profile": "site-inspection",
+  "date_from": "2030-01-14",
+  "date_to": "2030-01-14",
+  "inspectors": [
+    "Alex Demo",
+    "Sam Sample"
+  ],
+  "export_txt": "export/WhatsApp Chat with Demo Site Walk.txt",
+  "media_dir": "export",
+  "map_image": "map.png"
+}

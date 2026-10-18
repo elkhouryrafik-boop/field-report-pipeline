@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "field-report-pipeline"
+version = "0.1.0"
+description = "Turn WhatsApp field exports (chat, photos, voice notes, pins) into a Word report and a reviewer sheet."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+dependencies = [
+    "faster-whisper>=1.0",
+    "python-docx>=1.1",
+    "openpyxl>=3.1",
+    "jsonschema>=4.18",
+    "Pillow>=10",
+    "av>=11",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.5", "pyyaml>=6"]
+faces = ["opencv-python-headless>=4.8"]
+anthropic = ["anthropic>=0.40"]
+
+[tool.setuptools.packages.find]
+include = ["field_report*"]
+
+[tool.setuptools.package-data]
+field_report = ["schemas/*.json", "profiles/*.json", "review_app/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["slow: real-ASR tests, run only with FRP_RUN_SLOW=1"]
+
+[tool.ruff]
+line-length = 110
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "W6"]

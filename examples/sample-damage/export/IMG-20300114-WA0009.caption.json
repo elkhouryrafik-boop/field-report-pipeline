@@ -1,0 +1,8 @@
+{
+  "caption": "Exposed cable (synthetic scene, stop 4).",
+  "category": "Services",
+  "severity": "Minor",
+  "finding": "Exposed cable",
+  "stop": 4,
+  "scene": "exposed_cable"
+}

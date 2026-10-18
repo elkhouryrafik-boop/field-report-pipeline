@@ -1,0 +1,8 @@
+{
+  "caption": "Wall crack about 5 mm wide (synthetic scene, stop 1).",
+  "category": "Structure",
+  "severity": "Moderate",
+  "finding": "Wall crack about 5 mm wide",
+  "stop": 1,
+  "scene": "wall_crack"
+}

@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gaps.schema.json",
+  "title": "gaps.json (stage 2 scope) — evidence referenced in chat but not available",
+  "type": "object",
+  "required": ["status", "errors", "meta", "gaps", "counts"],
+  "additionalProperties": false,
+  "properties": {
+    "status": { "$ref": "#/$defs/status" },
+    "errors": { "$ref": "#/$defs/errors" },
+    "meta": { "$ref": "#/$defs/meta" },
+    "gaps": {
+      "type": "array",
+      "description": "MAY be empty — an empty gaps list is a legitimate 'ok' result and is NOT an EMPTY_RESULT violation",
+      "items": {
+        "type": "object",
+        "required": ["message_id", "ts", "sender", "line_no", "reason", "filename"],
+        "additionalProperties": false,
+        "properties": {
+          "message_id": { "type": "string", "pattern": "^M[0-9]{5}$" },
+          "ts": { "type": "string" },
+          "sender": { "type": ["string", "null"] },
+          "line_no": { "type": "integer", "minimum": 1 },
+          "reason": { "enum": ["media_omitted", "file_missing_on_disk", "unparsable_filename", "unreadable_file"] },
+          "filename": { "type": ["string", "null"] },
+          "note": { "type": ["string", "null"], "description": "e.g. trailing text on a <Media omitted> line naming the file" }
+        }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "required": ["total", "media_omitted", "file_missing_on_disk", "unparsable_filename", "unreadable_file"],
+      "properties": {
+        "total": { "type": "integer", "minimum": 0 },
+        "media_omitted": { "type": "integer", "minimum": 0 },
+        "file_missing_on_disk": { "type": "integer", "minimum": 0 },
+        "unparsable_filename": { "type": "integer", "minimum": 0 },
+        "unreadable_file": { "type": "integer", "minimum": 0 }
+      }
+    }
+  },
+  "$defs": {
+    "status": { "enum": ["ok", "partial", "failed"] },
+    "errors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["item", "code", "message", "retryable", "attempts"],
+        "additionalProperties": false,
+        "properties": {
+          "item": { "type": "string" },
+          "code": { "type": "string" },
+          "message": { "type": "string" },
+          "retryable": { "type": "boolean" },
+          "attempts": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "meta": {
+      "type": "object",
+      "required": ["stage", "site", "generated_at", "config_sha256", "input_counts", "output_counts"],
+      "properties": {
+        "stage": { "type": "string" },
+        "site": { "type": "string" },
+        "generated_at": { "type": "string", "format": "date-time" },
+        "config_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "input_counts": { "type": "object", "additionalProperties": { "type": "integer" } },
+        "output_counts": { "type": "object", "additionalProperties": { "type": "integer" } }
+      }
+    }
+  }
+}

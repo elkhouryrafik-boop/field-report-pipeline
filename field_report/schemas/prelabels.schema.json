@@ -1,0 +1,279 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "prelabels.schema.json",
+  "title": "prelabels.json (stage 5a pre-label: captions + proposed transcript->photo bindings)",
+  "type": "object",
+  "required": [
+    "status",
+    "errors",
+    "meta",
+    "photos",
+    "bindings",
+    "counts"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "status": {
+      "$ref": "#/$defs/status"
+    },
+    "errors": {
+      "$ref": "#/$defs/errors"
+    },
+    "meta": {
+      "$ref": "#/$defs/meta"
+    },
+    "photos": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "filename",
+          "cluster_id",
+          "caption",
+          "sector_guess",
+          "sector_confidence",
+          "visible_damage"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "filename": {
+            "type": "string"
+          },
+          "cluster_id": {
+            "type": "string",
+            "pattern": "^C[0-9]{3}$"
+          },
+          "caption": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "minLength": 10,
+            "description": "one line, descriptive only; null when the vision call failed"
+          },
+          "sector_guess": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 1,
+            "maximum": 99
+          },
+          "sector_confidence": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0,
+            "maximum": 1
+          },
+          "visible_damage": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "countable": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "object",
+                "required": [
+                  "what",
+                  "n"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "what": {
+                    "type": "string"
+                  },
+                  "n": {
+                    "type": "integer",
+                    "minimum": 1
+                  }
+                }
+              }
+            ]
+          },
+          "rating_guess": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "scale value hinted by the caption backend"
+          }
+        }
+      }
+    },
+    "bindings": {
+      "type": "array",
+      "description": "proposed transcript->photo association; one entry per audio that could be bound",
+      "items": {
+        "type": "object",
+        "required": [
+          "cluster_id",
+          "audio",
+          "photos",
+          "confidence",
+          "basis"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "cluster_id": {
+            "type": "string",
+            "pattern": "^C[0-9]{3}$"
+          },
+          "audio": {
+            "type": "string"
+          },
+          "photos": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "basis": {
+            "type": "string",
+            "minLength": 10,
+            "description": "the sentence the reviewer reads to judge the binding at a glance"
+          }
+        }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "photos_in",
+        "photos_captioned",
+        "photos_failed",
+        "audios_in",
+        "bindings_proposed",
+        "audios_unbound"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "photos_in": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "photos_captioned": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "photos_failed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "audios_in": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "bindings_proposed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "audios_unbound": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    }
+  },
+  "$defs": {
+    "status": {
+      "enum": [
+        "ok",
+        "partial",
+        "failed"
+      ]
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "item",
+          "code",
+          "message",
+          "retryable",
+          "attempts"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "item": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "retryable": {
+            "type": "boolean"
+          },
+          "attempts": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "meta": {
+      "type": "object",
+      "required": [
+        "stage",
+        "site",
+        "generated_at",
+        "config_sha256",
+        "input_counts",
+        "output_counts"
+      ],
+      "properties": {
+        "stage": {
+          "type": "string"
+        },
+        "site": {
+          "type": "string"
+        },
+        "generated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "config_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "input_counts": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer"
+          }
+        },
+        "output_counts": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer"
+          }
+        },
+        "model": {
+          "type": "string"
+        },
+        "prompt_version": {
+          "type": "string"
+        },
+        "schema_retries": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    }
+  }
+}

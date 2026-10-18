@@ -1,0 +1,8 @@
+{
+  "caption": "Rubble across access way (synthetic scene, stop 5).",
+  "category": "Access",
+  "severity": "Moderate",
+  "finding": "Rubble across access way",
+  "stop": 5,
+  "scene": "rubble"
+}

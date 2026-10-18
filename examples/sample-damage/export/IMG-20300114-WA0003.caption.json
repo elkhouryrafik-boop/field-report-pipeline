@@ -1,0 +1,8 @@
+{
+  "caption": "Hairline crack at plinth (synthetic scene, stop 1).",
+  "category": "Structure",
+  "severity": "Minor",
+  "finding": "Hairline crack at plinth",
+  "stop": 1,
+  "scene": "wall_crack"
+}

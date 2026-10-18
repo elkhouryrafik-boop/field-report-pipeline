@@ -1,0 +1,8 @@
+{
+  "caption": "Standing water on floor (synthetic scene, stop 5).",
+  "category": "Finishes",
+  "priority": "Low",
+  "finding": "Standing water on floor",
+  "stop": 5,
+  "scene": "puddle"
+}

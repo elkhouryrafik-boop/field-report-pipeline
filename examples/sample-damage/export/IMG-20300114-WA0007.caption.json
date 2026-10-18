@@ -1,0 +1,8 @@
+{
+  "caption": "Door frame distorted (synthetic scene, stop 3).",
+  "category": "Openings",
+  "severity": "Moderate",
+  "finding": "Door frame distorted",
+  "stop": 3,
+  "scene": "door_frame"
+}

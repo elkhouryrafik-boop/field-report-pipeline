@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "profile.schema.json",
+  "title": "report profile: what one run assesses, how stops are classified, and the words the deliverables use",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["name", "title", "classify", "categories", "scale", "stop_regex", "font", "report"],
+  "properties": {
+    "name": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+    "title": { "type": "string", "minLength": 3 },
+    "description": { "type": "string" },
+    "classify": {
+      "type": "boolean",
+      "description": "false: no classification; every stop becomes one chronological entry in the single catch-all category"
+    },
+    "quantities_sheet": { "type": "boolean", "description": "true: s8 writes quantities.xlsx" },
+    "font": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "size_pt"],
+      "properties": {
+        "name": { "type": "string" },
+        "size_pt": { "type": "number", "minimum": 6, "maximum": 24 }
+      }
+    },
+    "stop_regex": {
+      "type": "string",
+      "description": "regex with one capture group: the stop number (digits or a number word) a voice note opens with"
+    },
+    "categories": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 24,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "name", "short", "keywords"],
+        "properties": {
+          "id": { "type": "integer", "minimum": 1, "maximum": 99 },
+          "name": { "type": "string", "minLength": 2 },
+          "short": { "type": "string", "minLength": 2 },
+          "keywords": {
+            "type": "object",
+            "description": "term -> weight (1-5). Matched as whole words / phrases, case-insensitive.",
+            "additionalProperties": { "type": "integer", "minimum": 1, "maximum": 5 }
+          }
+        }
+      }
+    },
+    "scale": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["label", "values", "default", "keywords"],
+      "properties": {
+        "label": { "type": "string", "description": "column / field name in the deliverables, e.g. Priority" },
+        "values": {
+          "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string" },
+          "description": "most severe first"
+        },
+        "default": { "type": "string" },
+        "explicit_regex": {
+          "type": "string",
+          "description": "regex with one capture group: a rating the speaker stated outright"
+        },
+        "keywords": {
+          "type": "object",
+          "description": "scale value -> phrases that imply it when nothing was stated outright",
+          "additionalProperties": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "report": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "unit", "unit_plural", "findings_heading", "summary_heading", "priorities_heading"],
+      "properties": {
+        "title": { "type": "string" },
+        "unit": { "type": "string" },
+        "unit_plural": { "type": "string" },
+        "summary_heading": { "type": "string" },
+        "findings_heading": { "type": "string" },
+        "priorities_heading": { "type": "string" },
+        "absent_finding": { "type": "string" },
+        "absent_action": { "type": "string" }
+      }
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "caption": "Missing stair handrail (synthetic scene, stop 2).",
+  "category": "Access",
+  "priority": "High",
+  "finding": "Missing stair handrail",
+  "stop": 2,
+  "scene": "stair_handrail"
+}

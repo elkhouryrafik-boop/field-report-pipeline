@@ -1,0 +1,8 @@
+{
+  "caption": "Ceiling water stain (synthetic scene, stop 1).",
+  "category": "Envelope",
+  "priority": "Medium",
+  "finding": "Ceiling water stain",
+  "stop": 1,
+  "scene": "ceiling_stain"
+}

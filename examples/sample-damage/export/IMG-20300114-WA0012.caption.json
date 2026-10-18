@@ -1,0 +1,8 @@
+{
+  "caption": "Perimeter fence gap (synthetic scene, stop 5).",
+  "category": "External works",
+  "severity": "Minor",
+  "finding": "Perimeter fence gap",
+  "stop": 5,
+  "scene": "fence_gap"
+}

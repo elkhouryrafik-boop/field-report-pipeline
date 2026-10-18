@@ -1,0 +1,8 @@
+{
+  "caption": "Stair ceiling stain (synthetic scene, stop 2).",
+  "category": "Envelope",
+  "priority": "Low",
+  "finding": "Stair ceiling stain",
+  "stop": 2,
+  "scene": "ceiling_stain"
+}

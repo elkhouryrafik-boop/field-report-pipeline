@@ -1,0 +1,434 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "review.schema.json",
+  "title": "review.json (stage 5b review — human decision log)",
+  "type": "object",
+  "required": [
+    "status",
+    "errors",
+    "meta",
+    "stops",
+    "counts"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "status": {
+      "$ref": "#/$defs/status"
+    },
+    "errors": {
+      "$ref": "#/$defs/errors"
+    },
+    "meta": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/meta"
+        },
+        {
+          "type": "object",
+          "required": [
+            "reviewer",
+            "clusters_total"
+          ],
+          "properties": {
+            "reviewer": {
+              "type": "string",
+              "minLength": 1
+            },
+            "clusters_total": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "prelabels_sha256": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          }
+        }
+      ]
+    },
+    "stops": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "cluster_id",
+          "verdict",
+          "reviewed_at",
+          "human_note",
+          "gps_override",
+          "split_at",
+          "merge_with",
+          "photos",
+          "audios"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "cluster_id": {
+            "type": "string",
+            "pattern": "^C[0-9]{3}$"
+          },
+          "verdict": {
+            "enum": [
+              "pending",
+              "approved",
+              "discarded"
+            ]
+          },
+          "reviewed_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "human_note": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "outranks every other signal in the s6 payload"
+          },
+          "gps_override": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "object",
+                "required": [
+                  "lat",
+                  "lng"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "lat": {
+                    "type": "number",
+                    "minimum": -90,
+                    "maximum": 90
+                  },
+                  "lng": {
+                    "type": "number",
+                    "minimum": -180,
+                    "maximum": 180
+                  }
+                }
+              }
+            ]
+          },
+          "split_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^M[0-9]{5}$",
+            "description": "message id that begins the second stop"
+          },
+          "merge_with": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^C[0-9]{3}$"
+          },
+          "photos": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "filename",
+                "caption_override",
+                "excluded",
+                "move_to"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "filename": {
+                  "type": "string"
+                },
+                "caption_override": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "excluded": {
+                  "type": "boolean"
+                },
+                "exclude_reason": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "move_to": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "pattern": "^C[0-9]{3}$"
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "excluded": {
+                        "const": true
+                      }
+                    }
+                  },
+                  "then": {
+                    "properties": {
+                      "move_to": {
+                        "const": null
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "audios": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "file",
+                "text_override",
+                "en_override",
+                "binding",
+                "binding_source",
+                "dropped",
+                "drop_reason"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "file": {
+                  "type": "string"
+                },
+                "text_override": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "en_override": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "binding": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "binding_source": {
+                  "enum": [
+                    "accepted",
+                    "corrected",
+                    "manual",
+                    "none"
+                  ]
+                },
+                "dropped": {
+                  "type": "boolean"
+                },
+                "drop_reason": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "dropped": {
+                        "const": true
+                      }
+                    }
+                  },
+                  "then": {
+                    "properties": {
+                      "drop_reason": {
+                        "type": "string",
+                        "minLength": 3
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "message_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^M[0-9]{5}$"
+            },
+            "description": "the messages this verdict was passed on. Optional for review files written before it existed; s5c re-keys verdicts onto new cluster ids with it, which is the only handle a stop with no media has."
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "verdict": {
+                  "const": "discarded"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "human_note": {
+                  "type": "string",
+                  "minLength": 3
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "approved",
+        "discarded",
+        "pending",
+        "bindings_accepted",
+        "bindings_corrected",
+        "bindings_manual",
+        "photos_excluded",
+        "photos_moved",
+        "texts_edited"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "approved": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "discarded": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "pending": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "bindings_accepted": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "bindings_corrected": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "bindings_manual": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "photos_excluded": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "photos_moved": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "texts_edited": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    }
+  },
+  "$defs": {
+    "status": {
+      "enum": [
+        "ok",
+        "partial",
+        "failed"
+      ]
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "item",
+          "code",
+          "message",
+          "retryable",
+          "attempts"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "item": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "retryable": {
+            "type": "boolean"
+          },
+          "attempts": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "meta": {
+      "type": "object",
+      "required": [
+        "stage",
+        "site",
+        "generated_at",
+        "config_sha256",
+        "input_counts",
+        "output_counts"
+      ],
+      "properties": {
+        "stage": {
+          "type": "string"
+        },
+        "site": {
+          "type": "string"
+        },
+        "generated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "config_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "input_counts": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer"
+          }
+        },
+        "output_counts": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  }
+}

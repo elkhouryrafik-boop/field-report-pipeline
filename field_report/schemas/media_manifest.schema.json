@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "media_manifest.schema.json",
+  "title": "media_manifest.json (stage 2 scope)",
+  "type": "object",
+  "required": ["status", "errors", "meta", "media_dir", "items", "counts"],
+  "additionalProperties": false,
+  "properties": {
+    "status": { "$ref": "#/$defs/status" },
+    "errors": { "$ref": "#/$defs/errors" },
+    "meta": { "$ref": "#/$defs/meta" },
+    "media_dir": { "type": "string" },
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["message_id", "filename", "ext", "media_kind", "abs_path", "exists", "ts", "sender", "line_no"],
+        "additionalProperties": false,
+        "properties": {
+          "message_id": { "type": "string", "pattern": "^M[0-9]{5}$" },
+          "filename": { "type": "string" },
+          "ext": { "type": ["string", "null"] },
+          "media_kind": { "enum": ["photo", "audio", "document", "contact", "video", "other"] },
+          "abs_path": { "type": "string" },
+          "exists": { "type": "boolean" },
+          "size_bytes": { "type": ["integer", "null"], "minimum": 0 },
+          "sha256": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" },
+          "ts": { "type": "string" },
+          "sender": { "type": ["string", "null"] },
+          "line_no": { "type": "integer", "minimum": 1 }
+        }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "required": ["total", "present", "missing", "photo", "audio", "document", "other"],
+      "properties": {
+        "total": { "type": "integer", "minimum": 0 },
+        "present": { "type": "integer", "minimum": 0 },
+        "missing": { "type": "integer", "minimum": 0 },
+        "photo": { "type": "integer", "minimum": 0 },
+        "audio": { "type": "integer", "minimum": 0 },
+        "document": { "type": "integer", "minimum": 0 },
+        "other": { "type": "integer", "minimum": 0 }
+      }
+    }
+  },
+  "$defs": {
+    "status": { "enum": ["ok", "partial", "failed"] },
+    "errors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["item", "code", "message", "retryable", "attempts"],
+        "additionalProperties": false,
+        "properties": {
+          "item": { "type": "string" },
+          "code": { "type": "string" },
+          "message": { "type": "string" },
+          "retryable": { "type": "boolean" },
+          "attempts": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "meta": {
+      "type": "object",
+      "required": ["stage", "site", "generated_at", "config_sha256", "input_counts", "output_counts"],
+      "properties": {
+        "stage": { "type": "string" },
+        "site": { "type": "string" },
+        "generated_at": { "type": "string", "format": "date-time" },
+        "config_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "input_counts": { "type": "object", "additionalProperties": { "type": "integer" } },
+        "output_counts": { "type": "object", "additionalProperties": { "type": "integer" } }
+      }
+    }
+  }
+}

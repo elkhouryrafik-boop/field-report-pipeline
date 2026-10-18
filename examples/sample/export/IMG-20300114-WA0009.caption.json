@@ -1,0 +1,8 @@
+{
+  "caption": "Exposed cable (synthetic scene, stop 4).",
+  "category": "MEP",
+  "priority": "High",
+  "finding": "Exposed cable",
+  "stop": 4,
+  "scene": "exposed_cable"
+}

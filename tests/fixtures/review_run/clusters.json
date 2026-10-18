@@ -1,0 +1,165 @@
+{
+  "status": "ok",
+  "errors": [],
+  "meta": {
+    "stage": "s5_cluster",
+    "site": "Testville",
+    "generated_at": "2030-01-14T12:00:00Z",
+    "config_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "input_counts": {},
+    "output_counts": {},
+    "gap_threshold_sec": 180,
+    "rule": "test fixture",
+    "boundary_mode": "pin_gap"
+  },
+  "clusters": [
+    {
+      "id": "C001",
+      "seq": 1,
+      "start_ts": "2030-01-14T10:50:00",
+      "end_ts": "2030-01-14T10:53:00",
+      "boundary_reason": "first",
+      "gps": {
+        "lat": 0.001,
+        "lng": 0.002
+      },
+      "gps_message_id": "M00001",
+      "gps_inherited": false,
+      "message_ids": [
+        "M00001",
+        "M00002",
+        "M00003",
+        "M00004"
+      ],
+      "photos": [
+        {
+          "filename": "IMG-1.jpg",
+          "message_id": "M00002",
+          "ts": "2030-01-14T10:51:00",
+          "exists": true
+        },
+        {
+          "filename": "IMG-2.jpg",
+          "message_id": "M00003",
+          "ts": "2030-01-14T10:52:00",
+          "exists": true
+        }
+      ],
+      "audios": [
+        {
+          "filename": "PTT-1.opus",
+          "message_id": "M00004",
+          "ts": "2030-01-14T10:53:00",
+          "exists": true
+        }
+      ],
+      "texts": [
+        {
+          "message_id": "M00001",
+          "ts": "2030-01-14T10:50:00",
+          "sender": "Inspector A",
+          "text": "Arrived at the north block."
+        }
+      ],
+      "omitted_count": 0,
+      "senders": [
+        "Inspector A"
+      ],
+      "gps_points": [
+        {
+          "lat": 0.001,
+          "lng": 0.002,
+          "message_id": "M00001",
+          "ts": "2030-01-14T10:50:00"
+        }
+      ]
+    },
+    {
+      "id": "C002",
+      "seq": 2,
+      "start_ts": "2030-01-14T10:56:00",
+      "end_ts": "2030-01-14T10:59:00",
+      "boundary_reason": "gap",
+      "gps": {
+        "lat": 0.001,
+        "lng": 0.002
+      },
+      "gps_message_id": "M00001",
+      "gps_inherited": true,
+      "message_ids": [
+        "M00005",
+        "M00006",
+        "M00007",
+        "M00008"
+      ],
+      "photos": [
+        {
+          "filename": "IMG-3.jpg",
+          "message_id": "M00005",
+          "ts": "2030-01-14T10:56:00",
+          "exists": true
+        },
+        {
+          "filename": "IMG-4.jpg",
+          "message_id": "M00007",
+          "ts": "2030-01-14T10:58:00",
+          "exists": true
+        }
+      ],
+      "audios": [
+        {
+          "filename": "PTT-2.opus",
+          "message_id": "M00006",
+          "ts": "2030-01-14T10:57:00",
+          "exists": true
+        },
+        {
+          "filename": "PTT-3.opus",
+          "message_id": "M00008",
+          "ts": "2030-01-14T10:59:00",
+          "exists": true
+        }
+      ],
+      "texts": [],
+      "omitted_count": 0,
+      "senders": [
+        "Inspector A"
+      ]
+    },
+    {
+      "id": "C003",
+      "seq": 3,
+      "start_ts": "2030-01-14T11:10:00",
+      "end_ts": "2030-01-14T11:10:00",
+      "boundary_reason": "gap",
+      "gps": null,
+      "gps_message_id": null,
+      "gps_inherited": false,
+      "message_ids": [
+        "M00009"
+      ],
+      "photos": [
+        {
+          "filename": "IMG-5.jpg",
+          "message_id": "M00009",
+          "ts": "2030-01-14T11:10:00",
+          "exists": true
+        }
+      ],
+      "audios": [],
+      "texts": [],
+      "omitted_count": 0,
+      "senders": [
+        "Inspector A"
+      ]
+    }
+  ],
+  "counts": {
+    "clusters": 3,
+    "messages_in": 9,
+    "messages_assigned": 9,
+    "messages_unassigned": 0,
+    "clusters_with_gps": 2,
+    "clusters_without_gps": 1
+  }
+}

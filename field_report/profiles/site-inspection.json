@@ -1,0 +1,189 @@
+{
+  "name": "site-inspection",
+  "title": "Site inspection",
+  "description": "Walk-through inspection of a building or compound: observations grouped by discipline and rated by priority.",
+  "classify": true,
+  "quantities_sheet": false,
+  "font": {
+    "name": "Calibri",
+    "size_pt": 11
+  },
+  "stop_regex": "(?i)\\b(?:stop|sector)\\s*[-:]?\\s*(\\d{1,2}|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)\\b",
+  "categories": [
+    {
+      "id": 1,
+      "name": "Structure",
+      "short": "Structure",
+      "keywords": {
+        "crack": 3,
+        "cracks": 3,
+        "cracked": 3,
+        "cracking": 3,
+        "spalling": 3,
+        "settlement": 3,
+        "rebar": 3,
+        "column": 2,
+        "beam": 2,
+        "slab": 2,
+        "foundation": 2,
+        "structural": 3,
+        "deflection": 3,
+        "plinth": 2,
+        "concrete": 1,
+        "wall": 1,
+        "bulging": 2
+      }
+    },
+    {
+      "id": 2,
+      "name": "Building envelope",
+      "short": "Envelope",
+      "keywords": {
+        "roof": 3,
+        "leak": 3,
+        "water stain": 3,
+        "stain": 1,
+        "damp": 2,
+        "ceiling": 1,
+        "facade": 2,
+        "façade": 2,
+        "cladding": 2,
+        "gutter": 2,
+        "waterproofing": 3,
+        "seepage": 3,
+        "glazing": 2,
+        "window": 1,
+        "flashing": 2,
+        "downpipe": 2
+      }
+    },
+    {
+      "id": 3,
+      "name": "Mechanical, electrical and plumbing",
+      "short": "MEP",
+      "keywords": {
+        "cable": 3,
+        "cables": 3,
+        "wiring": 3,
+        "wire": 2,
+        "junction box": 3,
+        "conduit": 3,
+        "cable tray": 3,
+        "tray": 2,
+        "panel": 2,
+        "switchboard": 3,
+        "breaker": 3,
+        "pipe": 2,
+        "plumbing": 3,
+        "pump": 3,
+        "ventilation": 3,
+        "hvac": 3,
+        "duct": 2,
+        "light fitting": 2,
+        "generator": 3,
+        "socket": 2,
+        "electrical": 3
+      }
+    },
+    {
+      "id": 4,
+      "name": "Fire and life safety",
+      "short": "Fire & life safety",
+      "keywords": {
+        "fire": 4,
+        "exit": 3,
+        "exit sign": 3,
+        "alarm": 3,
+        "extinguisher": 4,
+        "sprinkler": 4,
+        "smoke": 3,
+        "escape": 3,
+        "emergency": 3,
+        "blocked": 2,
+        "evacuation": 3,
+        "fire door": 4
+      }
+    },
+    {
+      "id": 5,
+      "name": "Access and circulation",
+      "short": "Access",
+      "keywords": {
+        "stair": 3,
+        "stairs": 3,
+        "stairway": 3,
+        "handrail": 4,
+        "ramp": 3,
+        "step": 1,
+        "steps": 1,
+        "balustrade": 3,
+        "railing": 3,
+        "landing": 2,
+        "corridor": 1,
+        "lift": 2,
+        "elevator": 2,
+        "trip": 2,
+        "guard rail": 3
+      }
+    },
+    {
+      "id": 6,
+      "name": "Finishes",
+      "short": "Finishes",
+      "keywords": {
+        "paint": 3,
+        "flaking": 3,
+        "floor": 2,
+        "tile": 3,
+        "tiles": 3,
+        "finish": 2,
+        "plaster": 3,
+        "puddle": 3,
+        "standing water": 3,
+        "carpet": 3,
+        "skirting": 3,
+        "peeling": 3,
+        "scuffed": 2
+      }
+    }
+  ],
+  "scale": {
+    "label": "Priority",
+    "values": [
+      "High",
+      "Medium",
+      "Low"
+    ],
+    "default": "Medium",
+    "explicit_regex": "(?i)\\b(?:priority|rating)\\s*[:\\-]?\\s*(high|medium|low)\\b",
+    "keywords": {
+      "High": [
+        "unsafe",
+        "dangerous",
+        "hazard",
+        "immediately",
+        "urgent",
+        "blocked",
+        "exposed",
+        "collapse"
+      ],
+      "Low": [
+        "cosmetic",
+        "minor",
+        "small",
+        "hairline",
+        "flaking"
+      ]
+    }
+  },
+  "report": {
+    "title": "Site inspection report",
+    "unit": "Stop",
+    "unit_plural": "stops",
+    "summary_heading": "Summary",
+    "findings_heading": "Findings by discipline",
+    "priorities_heading": "Priorities",
+    "absent_finding": "No observation recorded in this category during the walk.",
+    "absent_action": "N/A: nothing recorded in this category."
+  }
+}

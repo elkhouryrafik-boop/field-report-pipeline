@@ -1,0 +1,74 @@
+{
+  "status": "ok",
+  "errors": [],
+  "meta": {
+    "stage": "s4_translate",
+    "site": "Testville",
+    "generated_at": "2030-01-14T12:00:00Z",
+    "config_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "input_counts": {},
+    "output_counts": {},
+    "model": "offline",
+    "prompt_version": "test",
+    "schema_retries": 0
+  },
+  "items": [
+    {
+      "file": "PTT-1.opus",
+      "message_id": "M00004",
+      "ts": "2030-01-14T10:53:00",
+      "text_raw": "Two stair treads are cracked.",
+      "text_clean": "Two stair treads are cracked.",
+      "en_text": "Two stair treads are cracked.",
+      "unclear_spans": [],
+      "domain_terms": [],
+      "quantities_mentioned": [],
+      "status": "ok",
+      "attempts": 1,
+      "error": null,
+      "language": "en",
+      "translation": "passthrough"
+    },
+    {
+      "file": "PTT-2.opus",
+      "message_id": "M00006",
+      "ts": "2030-01-14T10:57:00",
+      "text_raw": "This is the east stair and [unclear].",
+      "text_clean": "This is the east stair and [unclear].",
+      "en_text": "This is the east stair and [unclear].",
+      "unclear_spans": [
+        "[unclear]"
+      ],
+      "domain_terms": [],
+      "quantities_mentioned": [],
+      "status": "ok",
+      "attempts": 1,
+      "error": null,
+      "language": "en",
+      "translation": "passthrough"
+    },
+    {
+      "file": "PTT-3.opus",
+      "message_id": "M00008",
+      "ts": "2030-01-14T10:59:00",
+      "text_raw": "The gate is missing a hinge.",
+      "text_clean": "The gate is missing a hinge.",
+      "en_text": "The gate is missing a hinge.",
+      "unclear_spans": [],
+      "domain_terms": [],
+      "quantities_mentioned": [],
+      "status": "ok",
+      "attempts": 1,
+      "error": null,
+      "language": "en",
+      "translation": "passthrough"
+    }
+  ],
+  "counts": {
+    "input_items": 3,
+    "ok": 3,
+    "partial": 0,
+    "failed": 0,
+    "skipped": 0
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "caption": "Ceiling stain below roof opening (synthetic scene, stop 2).",
+  "category": "Roof",
+  "severity": "Moderate",
+  "finding": "Ceiling stain below roof opening",
+  "stop": 2,
+  "scene": "ceiling_stain"
+}

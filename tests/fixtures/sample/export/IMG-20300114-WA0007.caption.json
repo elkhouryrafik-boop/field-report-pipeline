@@ -1,0 +1,8 @@
+{
+  "caption": "Blocked fire exit (synthetic scene, stop 3).",
+  "category": "Fire & life safety",
+  "priority": "High",
+  "finding": "Blocked fire exit",
+  "stop": 3,
+  "scene": "blocked_door"
+}

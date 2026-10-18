@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>s5b review</title>
+<!-- Same-origin only: no CDN, no external font, no analytics. The reviewer's
+     machine is often offline in the field. -->
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<header id="topbar">
+  <div class="brand">
+    <span class="stage">s5b</span>
+    <span id="site">loading…</span>
+    <span class="dim" id="reviewer"></span>
+  </div>
+
+  <div class="progress">
+    <strong id="progress">0/0</strong>
+    <span class="dim">reviewed</span>
+    <div class="bar"><div id="progressfill"></div></div>
+  </div>
+
+  <div id="counts" class="counts"></div>
+
+  <div id="savestate" class="save idle" role="status" aria-live="polite">ready</div>
+
+  <div class="topactions">
+    <button id="btn-help" type="button" title="keyboard shortcuts (?)">?</button>
+    <button id="btn-finish" type="button" title="check every stop before you leave">FINISH</button>
+  </div>
+</header>
+
+<div id="shell">
+  <nav id="rail" aria-label="all stops"></nav>
+
+  <main id="card-host" tabindex="-1">
+    <p class="loading">loading stops…</p>
+  </main>
+
+  <aside id="tray" aria-label="orphan tray">
+    <h2>Orphan tray <span id="orphan-count" class="dim"></span></h2>
+    <p class="dim tray-help">Photos in no stop, or in a stop you discarded.</p>
+    <div id="orphan-list"></div>
+  </aside>
+</div>
+
+<div id="overlay" hidden></div>
+
+<script src="/app.js"></script>
+</body>
+</html>

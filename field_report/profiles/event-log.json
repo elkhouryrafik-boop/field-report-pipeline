@@ -1,0 +1,38 @@
+{
+  "name": "event-log",
+  "title": "Event log",
+  "description": "No classification: a chronological log of stops, each with its transcript and photos.",
+  "classify": false,
+  "quantities_sheet": false,
+  "font": {
+    "name": "Calibri",
+    "size_pt": 11
+  },
+  "stop_regex": "(?i)\\b(?:stop|sector)\\s*[-:]?\\s*(\\d{1,2}|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)\\b",
+  "categories": [
+    {
+      "id": 1,
+      "name": "Event log",
+      "short": "Events",
+      "keywords": {}
+    }
+  ],
+  "scale": {
+    "label": "Rating",
+    "values": [
+      "N/A"
+    ],
+    "default": "N/A",
+    "keywords": {}
+  },
+  "report": {
+    "title": "Field event log",
+    "unit": "Stop",
+    "unit_plural": "stops",
+    "summary_heading": "Overview",
+    "findings_heading": "Chronological log",
+    "priorities_heading": "Follow-up",
+    "absent_finding": "Nothing recorded.",
+    "absent_action": "N/A: nothing recorded."
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "caption": "Roof sheeting missing (synthetic scene, stop 2).",
+  "category": "Roof",
+  "severity": "Severe",
+  "finding": "Roof sheeting missing",
+  "stop": 2,
+  "scene": "roof_sheeting"
+}

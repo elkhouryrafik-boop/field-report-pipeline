@@ -1,0 +1,477 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "clusters_verified.schema.json",
+  "title": "clusters_verified.json (stage 5c apply_review)",
+  "type": "object",
+  "required": [
+    "status",
+    "errors",
+    "meta",
+    "clusters",
+    "counts",
+    "discarded"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "status": {
+      "$ref": "#/$defs/status"
+    },
+    "errors": {
+      "$ref": "#/$defs/errors"
+    },
+    "meta": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/meta"
+        },
+        {
+          "type": "object",
+          "required": [
+            "gap_threshold_sec",
+            "rule"
+          ],
+          "properties": {
+            "boundary_mode": {
+              "enum": [
+                "dot",
+                "pin_gap"
+              ],
+              "description": "carried through from clusters.json — dot: everything between two lone-'.' messages is one asset and a pin is a location inside it; pin_gap: the original rule for exports with no dots"
+            },
+            "gap_threshold_sec": {
+              "type": "integer"
+            },
+            "rule": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "clusters": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "seq",
+          "start_ts",
+          "end_ts",
+          "boundary_reason",
+          "gps",
+          "gps_inherited",
+          "message_ids",
+          "photos",
+          "audios",
+          "texts",
+          "omitted_count",
+          "senders",
+          "human_verified"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^C[0-9]{3}[a-z]?$",
+            "description": "a split stop keeps its parent id plus an a/b suffix"
+          },
+          "seq": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "start_ts": {
+            "type": "string"
+          },
+          "end_ts": {
+            "type": "string"
+          },
+          "boundary_reason": {
+            "enum": [
+              "first",
+              "gap",
+              "new_pin",
+              "separator"
+            ]
+          },
+          "gps": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "object",
+                "required": [
+                  "lat",
+                  "lng"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "lat": {
+                    "type": "number",
+                    "minimum": -90,
+                    "maximum": 90
+                  },
+                  "lng": {
+                    "type": "number",
+                    "minimum": -180,
+                    "maximum": 180
+                  }
+                }
+              }
+            ]
+          },
+          "gps_message_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^M[0-9]{5}$"
+          },
+          "gps_points": {
+            "type": "array",
+            "description": "every pin dropped inside this stop, in order; gps above is the first of them. A reviewer who corrects the location edits gps, not this list.",
+            "items": {
+              "type": "object",
+              "required": [
+                "lat",
+                "lng",
+                "message_id",
+                "ts"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "lat": {
+                  "type": "number",
+                  "minimum": -90,
+                  "maximum": 90
+                },
+                "lng": {
+                  "type": "number",
+                  "minimum": -180,
+                  "maximum": 180
+                },
+                "message_id": {
+                  "type": "string",
+                  "pattern": "^M[0-9]{5}$"
+                },
+                "ts": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "gps_inherited": {
+            "type": "boolean",
+            "description": "true when gps is the last-seen pin from an earlier cluster rather than a pin inside this cluster"
+          },
+          "message_ids": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "pattern": "^M[0-9]{5}$"
+            }
+          },
+          "photos": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "filename",
+                "message_id",
+                "ts",
+                "exists"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "filename": {
+                  "type": "string"
+                },
+                "message_id": {
+                  "type": "string",
+                  "pattern": "^M[0-9]{5}$"
+                },
+                "ts": {
+                  "type": "string"
+                },
+                "exists": {
+                  "type": "boolean"
+                },
+                "pin_message_id": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "pattern": "^M[0-9]{5}$",
+                  "description": "the pin this photo was taken at — an entry in gps_points, or null when the stop had not been pinned yet"
+                }
+              }
+            }
+          },
+          "audios": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "filename",
+                "message_id",
+                "ts",
+                "exists"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "filename": {
+                  "type": "string"
+                },
+                "message_id": {
+                  "type": "string",
+                  "pattern": "^M[0-9]{5}$"
+                },
+                "ts": {
+                  "type": "string"
+                },
+                "exists": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "texts": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "message_id",
+                "ts",
+                "sender",
+                "text"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "message_id": {
+                  "type": "string",
+                  "pattern": "^M[0-9]{5}$"
+                },
+                "ts": {
+                  "type": "string"
+                },
+                "sender": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "text": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "omitted_count": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "senders": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "human_verified": {
+            "type": "boolean"
+          },
+          "human_note": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "origin": {
+            "type": "string",
+            "description": "provenance of this stop: C002 | C002+C003 (merge) | C002/a (split)"
+          },
+          "photo_captions": {
+            "type": "object",
+            "additionalProperties": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "description": "filename -> reviewer-approved caption"
+          },
+          "audio_bindings": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "audio filename -> the photo filenames it refers to"
+          },
+          "gps_source": {
+            "enum": [
+              "pin",
+              "inherited",
+              "reviewer",
+              null
+            ],
+            "description": "where this stop's coordinates came from: a pin inside it, the last pin of an earlier stop, or the reviewer correcting it at the s5b gate"
+          }
+        }
+      }
+    },
+    "discarded": {
+      "type": "array",
+      "description": "stops the reviewer discarded, with the reason they gave",
+      "items": {
+        "type": "object",
+        "required": [
+          "cluster_id",
+          "reason"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "cluster_id": {
+            "type": "string",
+            "pattern": "^C[0-9]{3}[a-z]?$"
+          },
+          "reason": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "clusters",
+        "messages_in",
+        "messages_assigned",
+        "messages_unassigned",
+        "clusters_with_gps",
+        "clusters_without_gps"
+      ],
+      "properties": {
+        "clusters": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "messages_in": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "messages_assigned": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "messages_unassigned": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "a discarded stop legitimately unassigns messages"
+        },
+        "clusters_with_gps": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "clusters_without_gps": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "discarded": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "messages_dropped": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    }
+  },
+  "$defs": {
+    "status": {
+      "enum": [
+        "ok",
+        "partial",
+        "failed"
+      ]
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "item",
+          "code",
+          "message",
+          "retryable",
+          "attempts"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "item": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "retryable": {
+            "type": "boolean"
+          },
+          "attempts": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "meta": {
+      "type": "object",
+      "required": [
+        "stage",
+        "site",
+        "generated_at",
+        "config_sha256",
+        "input_counts",
+        "output_counts"
+      ],
+      "properties": {
+        "stage": {
+          "type": "string"
+        },
+        "site": {
+          "type": "string"
+        },
+        "generated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "config_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "input_counts": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer"
+          }
+        },
+        "output_counts": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  }
+}

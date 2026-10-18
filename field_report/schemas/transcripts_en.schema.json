@@ -1,0 +1,421 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "transcripts_en.schema.json",
+  "title": "transcripts_en.json (stage 4 clean + translate)",
+  "type": "object",
+  "required": [
+    "status",
+    "errors",
+    "meta",
+    "items",
+    "counts"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "status": {
+      "$ref": "#/$defs/status"
+    },
+    "errors": {
+      "$ref": "#/$defs/errors"
+    },
+    "meta": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/meta"
+        },
+        {
+          "type": "object",
+          "required": [
+            "model",
+            "prompt_version",
+            "schema_retries"
+          ],
+          "properties": {
+            "model": {
+              "type": "string",
+              "description": "translate backend name"
+            },
+            "prompt_version": {
+              "type": "string"
+            },
+            "schema_retries": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "total re-asks caused by schema-invalid model output (CCA P9)"
+            },
+            "batch_size": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        }
+      ]
+    },
+    "items": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "type": "object",
+        "required": [
+          "file",
+          "message_id",
+          "ts",
+          "text_raw",
+          "text_clean",
+          "en_text",
+          "unclear_spans",
+          "domain_terms",
+          "quantities_mentioned",
+          "status",
+          "attempts",
+          "error"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "file": {
+            "type": "string"
+          },
+          "message_id": {
+            "type": "string",
+            "pattern": "^M[0-9]{5}$"
+          },
+          "ts": {
+            "type": "string"
+          },
+          "text_raw": {
+            "type": "string",
+            "description": "the transcript exactly as the ASR backend produced it"
+          },
+          "text_clean": {
+            "type": "string",
+            "description": "whitespace-normalised transcript in the spoken language; unresolved audio rendered as the literal token [unclear] - never invented"
+          },
+          "en_text": {
+            "type": "string",
+            "description": "English text; carries [unclear] tokens through verbatim"
+          },
+          "unclear_spans": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "domain_terms": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "source",
+                "en"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "source": {
+                  "type": "string"
+                },
+                "en": {
+                  "type": "string"
+                },
+                "sector_hint": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "minimum": 1,
+                  "maximum": 99
+                }
+              }
+            }
+          },
+          "quantities_mentioned": {
+            "type": "array",
+            "description": "only quantities actually spoken; no derivation, no rounding-up",
+            "items": {
+              "$ref": "#/$defs/quantity"
+            }
+          },
+          "confidence": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0,
+            "maximum": 1
+          },
+          "human_edited": {
+            "type": "boolean"
+          },
+          "text_machine": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "pre-edit text_clean; present only when human_edited"
+          },
+          "en_text_machine": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "pre-edit en_text; present only when human_edited"
+          },
+          "status": {
+            "enum": [
+              "ok",
+              "partial",
+              "failed",
+              "skipped"
+            ]
+          },
+          "attempts": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 3
+          },
+          "error": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "object",
+                "required": [
+                  "code",
+                  "message"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  },
+                  "message": {
+                    "type": "string"
+                  },
+                  "retryable": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            ]
+          },
+          "sector_declared": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 1,
+            "maximum": 99,
+            "description": "stop number the inspector spoke at the start of the note; a human signal"
+          },
+          "language": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "translation": {
+            "enum": [
+              "source",
+              "whisper",
+              "passthrough"
+            ],
+            "description": "how en_text was obtained"
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "ok"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "en_text": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "text_clean": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "input_items",
+        "ok",
+        "partial",
+        "failed",
+        "skipped"
+      ],
+      "properties": {
+        "input_items": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "ok": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "partial": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "failed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "skipped": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    }
+  },
+  "$defs": {
+    "status": {
+      "enum": [
+        "ok",
+        "partial",
+        "failed"
+      ]
+    },
+    "quantity": {
+      "type": "object",
+      "required": [
+        "unit",
+        "value",
+        "confirmed"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "unit": {
+          "enum": [
+            "m",
+            "km",
+            "m2",
+            "m3",
+            "m3/h",
+            "no",
+            "lm",
+            "kVA",
+            "kW",
+            "ton",
+            "%",
+            "mm",
+            "unit",
+            "other"
+          ]
+        },
+        "value": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "null when only a qualitative amount was stated; value_text then carries the words"
+        },
+        "value_text": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "confirmed": {
+          "type": "boolean",
+          "description": "false => report must flag it 'to be confirmed'"
+        },
+        "verbatim": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "item",
+          "code",
+          "message",
+          "retryable",
+          "attempts"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "item": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "retryable": {
+            "type": "boolean"
+          },
+          "attempts": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "meta": {
+      "type": "object",
+      "required": [
+        "stage",
+        "site",
+        "generated_at",
+        "config_sha256",
+        "input_counts",
+        "output_counts"
+      ],
+      "properties": {
+        "stage": {
+          "type": "string"
+        },
+        "site": {
+          "type": "string"
+        },
+        "generated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "config_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "input_counts": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer"
+          }
+        },
+        "output_counts": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  }
+}
